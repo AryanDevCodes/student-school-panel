@@ -146,5 +146,3 @@ Unit and integration tests are located in `src/test/java`.
 This project is licensed under the MIT License.
 
 ---
-
-_Replace the repository URL and license as needed._
