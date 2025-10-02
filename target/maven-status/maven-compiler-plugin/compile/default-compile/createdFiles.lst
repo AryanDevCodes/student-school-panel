@@ -1,0 +1,17 @@
+com\example\crudemployee\service\CustomUserDetailsService.class
+com\example\crudemployee\entity\SchoolEntity.class
+com\example\crudemployee\controller\UserController.class
+com\example\crudemployee\CrudEmployeeApplication.class
+com\example\crudemployee\repository\student\StudentRepo.class
+com\example\crudemployee\repository\management\SchoolRepository.class
+com\example\crudemployee\service\UserService.class
+com\example\crudemployee\DataInitializer.class
+com\example\crudemployee\config\SecurityConfig.class
+com\example\crudemployee\controller\student\StudentController.class
+com\example\crudemployee\controller\management\SchoolController.class
+com\example\crudemployee\service\management\ManagementService.class
+com\example\crudemployee\entity\UserEntity.class
+com\example\crudemployee\entity\StudentEntity.class
+com\example\crudemployee\entity\role\Role.class
+com\example\crudemployee\service\management\IManagementService.class
+com\example\crudemployee\repository\UserRepository.class

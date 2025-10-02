@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>School Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f7f7;
+            margin: 0;
+            padding: 30px;
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            max-width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .add-btn {
+            background: #388e3c;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .add-btn:hover {
+            background: #2e7d32;
+        }
+        table {
+            border-collapse: collapse;
+            width: 90%;
+            margin: 20px auto;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 12px 18px;
+            text-align: left;
+        }
+        th {
+            background: #1976d2;
+            color: #fff;
+            font-weight: 600;
+        }
+        tr:nth-child(even) {
+            background: #f1f5fa;
+        }
+        tr:hover {
+            background: #e3f2fd;
+        }
+        .action-btn {
+            margin-right: 8px;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            background: #1976d2;
+            color: #fff;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 12px;
+        }
+        .action-btn.edit {
+            background: #ff9800;
+        }
+        .action-btn.delete {
+            background: #d32f2f;
+        }
+        .action-btn:hover {
+            opacity: 0.8;
+        }
+        .no-schools {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h2>School Management</h2>
+
+    <div class="header-actions">
+        <h3>All Schools</h3>
+        <a th:href="@{/schools/new}" class="add-btn">+ Add New School</a>
+    </div>
+
+    <div th:if="${schools != null and !schools.empty}">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>School Name</th>
+                    <th>Principal</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>District</th>
+                    <th>State</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="school : ${schools}">
+                    <td th:text="${school.id}"></td>
+                    <td th:text="${school.name}"></td>
+                    <td th:text="${school.principalName}"></td>
+                    <td th:text="${school.phone}"></td>
+                    <td th:text="${school.email}"></td>
+                    <td th:text="${school.district}"></td>
+                    <td th:text="${school.state}"></td>
+                    <td>
+                        <a th:href="@{'/schools/' + ${school.id}}" class="action-btn">View</a>
+                        <a th:href="@{'/schools/edit/' + ${school.id}}" class="action-btn edit">Edit</a>
+                        <a th:href="@{'/schools/delete/' + ${school.id}}"
+                           class="action-btn delete"
+                           onclick="return confirm('Are you sure you want to delete this school?');">Delete</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:if="${schools == null or schools.empty}" class="no-schools">
+        <p>No schools found. <a th:href="@{/schools/new}">Add the first school</a></p>
+    </div>
+</body>
+</html>
+

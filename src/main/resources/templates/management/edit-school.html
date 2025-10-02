@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit School</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f7f7;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(30, 58, 138, 0.08);
+            padding: 32px 40px 24px 40px;
+        }
+
+        h2 {
+            color: #1976d2;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #1976d2;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        input[type="url"] {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            border: 1px solid #bdbdbd;
+            border-radius: 6px;
+            font-size: 15px;
+            background: #f1f5fa;
+            transition: border 0.2s, background 0.2s;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            border: 2px solid #1976d2;
+            outline: none;
+            background: #e3f2fd;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #1976d2;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: #1565c0;
+        }
+
+        .btn-secondary {
+            background: #bdbdbd;
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background: #a6a6a6;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Edit School</h2>
+
+    <form method="post" th:action="@{'/schools/' + ${school.id}}" th:object="${school}">
+        <input th:field="*{id}" type="hidden"/>
+
+        <div class="form-grid">
+            <div class="form-group full-width">
+                <label for="name">School Name *</label>
+                <input id="name" required th:field="*{name}" type="text">
+            </div>
+
+            <div class="form-group">
+                <label for="principalName">Principal Name *</label>
+                <input id="principalName" required th:field="*{principalName}" type="text">
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number *</label>
+                <input id="phone" required th:field="*{phone}" type="text">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address *</label>
+                <input id="email" required th:field="*{email}" type="email">
+            </div>
+
+            <div class="form-group">
+                <label for="website">Website</label>
+                <input id="website" th:field="*{website}" type="url">
+            </div>
+
+            <div class="form-group full-width">
+                <label for="address">Address *</label>
+                <input id="address" required th:field="*{address}" type="text">
+            </div>
+
+            <div class="form-group">
+                <label for="district">District *</label>
+                <input id="district" required th:field="*{district}" type="text">
+            </div>
+
+            <div class="form-group">
+                <label for="state">State *</label>
+                <input id="state" required th:field="*{state}" type="text">
+            </div>
+
+            <div class="form-group">
+                <label for="country">Country *</label>
+                <input id="country" required th:field="*{country}" type="text">
+            </div>
+
+            <div class="form-group">
+                <label for="postalCode">Postal Code *</label>
+                <input id="postalCode" required th:field="*{postalCode}" type="text">
+            </div>
+
+            <div class="form-group">
+                <label for="type">School Type *</label>
+                <input id="type" placeholder="e.g., Public, Private" required th:field="*{type}" type="text">
+            </div>
+
+            <div class="form-group">
+                <label for="affiliation">Affiliation *</label>
+                <input id="affiliation" placeholder="e.g., CBSE, ICSE" required th:field="*{affiliation}" type="text">
+            </div>
+
+            <div class="form-group">
+                <label for="establishedYear">Established Year *</label>
+                <input id="establishedYear" max="2100" min="1800" required th:field="*{establishedYear}" type="number">
+            </div>
+
+            <div class="form-group">
+                <label for="mediumOfInstruction">Medium of Instruction *</label>
+                <input id="mediumOfInstruction" placeholder="e.g., English, Hindi" required
+                       th:field="*{mediumOfInstruction}" type="text">
+            </div>
+
+            <div class="form-group">
+                <label for="numberOfStudents">Number of Students *</label>
+                <input id="numberOfStudents" min="0" required th:field="*{numberOfStudents}" type="number">
+            </div>
+
+            <div class="form-group">
+                <label for="numberOfTeachers">Number of Teachers *</label>
+                <input id="numberOfTeachers" min="0" required th:field="*{numberOfTeachers}" type="number">
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button class="btn btn-primary" type="submit">Update School</button>
+            <a class="btn btn-secondary" th:href="@{'/schools/' + ${school.id}}">Cancel</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Student List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f7f7;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .header {
+            background: white;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 95%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+        }
+
+        .page-title {
+            color: #333;
+            font-size: 1.8em;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .search-bar {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            max-width: 95%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 95%;
+            margin: 20px auto;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px 18px;
+            text-align: left;
+        }
+
+        th {
+            background: #1976d2;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: #f1f5fa;
+        }
+
+        tr:hover {
+            background: #e3f2fd;
+        }
+
+        .action-btn {
+            margin: 2px;
+            padding: 5px 8px;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: inline-block;
+            min-width: 45px;
+            text-align: center;
+        }
+
+        .action-btn:hover {
+            opacity: 0.8;
+            transform: translateY(-1px);
+        }
+
+        .action-btn.view {
+            background: #1976d2;
+        }
+
+        .action-btn.edit {
+            background: #ff9800;
+        }
+
+        .action-btn.delete {
+            background: #d32f2f;
+        }
+
+        .action-btn.fees {
+            background: #4caf50;
+        }
+
+        .actions-cell {
+            white-space: nowrap;
+            min-width: 200px;
+        }
+
+        .actions-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3px;
+            align-items: center;
+        }
+
+        .role-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .role-student {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .role-management {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .role-school {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .btn-primary {
+            background: #1976d2;
+            color: white;
+        }
+
+        .btn-success {
+            background: #4caf50;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <div class="header-content">
+        <h1 class="page-title">Student Management</h1>
+        <div class="header-actions">
+            <a class="btn btn-success" href="/schools/add-student">+ Add Student</a>
+            <a class="btn btn-primary" href="/management/fees">Manage Fees</a>
+            <a class="btn btn-secondary" href="/management/dashboard">Dashboard</a>
+        </div>
+    </div>
+</div>
+
+<div class="search-bar">
+    <form method="get" th:action="@{/schools/view_students}">
+        <input name="keyword" placeholder="Search by name, email, or course" style="padding: 8px 12px; border-radius: 4px; border: 1px solid #ccc; width: 300px;"
+               th:value="${keyword}"
+               type="text">
+        <button class="btn btn-primary" type="submit">Search</button>
+    </form>
+</div>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Course</th>
+        <th>Age</th>
+        <th>Fee</th>
+        <th>Role</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="student : ${students}">
+        <td th:text="${student.id}"></td>
+        <td th:text="${student.name}"></td>
+        <td th:text="${student.email}"></td>
+        <td th:text="${student.course}"></td>
+        <td th:text="${student.age}"></td>
+        <td th:text="${'₹' + student.fee}"></td>
+        <td>
+                <span th:class="${'role-badge role-' + student.role.name().toLowerCase()}"
+                      th:text="${student.role.name()}"></span>
+        </td>
+        <td>
+            <div class="actions-cell">
+                <div class="actions-row">
+                    <a class="action-btn view" th:href="@{'/students/view/' + ${student.id}}">View</a>
+                    <a class="action-btn edit" th:href="@{'/schools/students/edit/' + ${student.id}}">Edit</a>
+                    <a class="action-btn fees" th:href="@{'/management/fees/student/' + ${student.id}}">Fees</a>
+                    <a class="action-btn delete"
+                       onclick="return confirm('Are you sure you want to delete this student?');"
+                       th:href="@{'/schools/students/delete/' + ${student.id}}">Delete</a>
+                </div>
+            </div>
+        </td>
+    </tr>
+    <tr th:if="${students == null or students.isEmpty()}">
+        <td colspan="8" style="text-align: center; color: #666; font-style: italic; padding: 30px;">
+            No students found.
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Fee Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f7f7;
+            margin: 0;
+            padding: 30px;
+        }
+        .header {
+            background: white;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+        }
+        .page-title {
+            color: #333;
+            font-size: 1.8em;
+            font-weight: 600;
+            margin: 0;
+        }
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-primary {
+            background: #1976d2;
+            color: white;
+        }
+        .btn-success {
+            background: #4caf50;
+            color: white;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .students-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        .student-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .student-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .student-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .student-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #1976d2;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        .student-info h3 {
+            margin: 0 0 5px 0;
+            color: #333;
+            font-size: 1.2em;
+        }
+        .student-info p {
+            margin: 0;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .fee-summary {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .fee-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .fee-row:last-child {
+            margin-bottom: 0;
+            padding-top: 8px;
+            border-top: 1px solid #dee2e6;
+            font-weight: 600;
+        }
+        .student-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.85em;
+            border-radius: 4px;
+        }
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border-left: 4px solid #28a745;
+        }
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border-left: 4px solid #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <h1 class="page-title">Fee Management</h1>
+            <div class="header-actions">
+                <a href="/management/fees/create" class="btn btn-primary">+ Add New Fee</a>
+                <a href="/management/fees/bulk-create" class="btn btn-success">Bulk Create Fees</a>
+                <a href="/management/dashboard" class="btn" style="background: #6c757d; color: white;">Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Success/Error Messages -->
+        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+        <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+        <div class="students-grid">
+            <div th:each="student : ${students}" class="student-card">
+                <div class="student-header">
+                    <div class="student-avatar" th:text="${student.name.substring(0,1)}">S</div>
+                    <div class="student-info">
+                        <h3 th:text="${student.name}">Student Name</h3>
+                        <p th:text="${student.email + ' | ' + student.course}">Email | Course</p>
+                    </div>
+                </div>
+
+                <div class="fee-summary">
+                    <div class="fee-row">
+                        <span>Base Fee:</span>
+                        <span th:text="${'₹' + student.fee}">₹0</span>
+                    </div>
+                    <div class="fee-row">
+                        <span>Total Applied:</span>
+                        <span th:text="${'₹' + (student.fee != null ? student.fee : 0)}">₹0</span>
+                    </div>
+                    <div class="fee-row">
+                        <span>Pending Amount:</span>
+                        <span style="color: #dc3545;" th:text="${'₹' + (student.fee != null ? student.fee : 0)}">₹0</span>
+                    </div>
+                </div>
+
+                <div class="student-actions">
+                    <a th:href="@{'/management/fees/student/' + ${student.id}}" class="btn btn-sm btn-primary">View Details</a>
+                    <a th:href="@{'/management/fees/create?studentId=' + ${student.id}}" class="btn btn-sm btn-success">Add Fee</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

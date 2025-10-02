@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .welcome-text {
+            color: #333;
+            font-size: 1.5em;
+            font-weight: 600;
+        }
+
+        .logout-btn {
+            background: #d32f2f;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: #c62828;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .profile-icon {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .grades-icon {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .fees-icon {
+            background: #e8f5e8;
+            color: #388e3c;
+        }
+
+        .schedule-icon {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .card p {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .card-link {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            transition: opacity 0.2s;
+        }
+
+        .card-link:hover {
+            opacity: 0.9;
+        }
+
+        .profile-summary {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #1976d2;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            font-weight: bold;
+            margin-right: 20px;
+        }
+
+        .profile-info h2 {
+            color: #333;
+            margin: 0 0 5px 0;
+            font-size: 1.8em;
+        }
+
+        .profile-info p {
+            color: #666;
+            margin: 0;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <div class="header-content">
+        <div class="welcome-text">Student Portal</div>
+        <a class="logout-btn" href="/logout">Logout</a>
+    </div>
+</div>
+
+<div class="container">
+    <div class="profile-summary">
+        <div class="profile-header">
+            <div class="avatar" th:text="${student.name.substring(0,1)}">S</div>
+            <div class="profile-info">
+                <h2 th:text="${student.name}">Student Name</h2>
+                <p th:text="${student.course}">Course</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard-cards">
+        <div class="card">
+            <div class="card-icon profile-icon">👤</div>
+            <h3>My Profile</h3>
+            <p>View and manage your personal information, contact details, and academic information.</p>
+            <a class="card-link" href="/student/profile">View Profile</a>
+        </div>
+
+        <div class="card">
+            <div class="card-icon grades-icon">📊</div>
+            <h3>My Grades</h3>
+            <p th:text="${'Current GPA: ' + (currentGPA != null ? currentGPA : 'N/A') + ' | Credits: ' + (totalCredits != null ? totalCredits : 0)}">
+                Check your academic performance and grades.</p>
+            <a class="card-link" href="/student/grades">View Grades</a>
+        </div>
+
+        <div class="card">
+            <div class="card-icon fees-icon">💰</div>
+            <h3>Fee Details</h3>
+            <p th:text="${'Total Fee: ₹' + (totalFeeAmount != null ? totalFeeAmount : 0) + ' | Pending: ₹' + (pendingAmount != null ? pendingAmount : 0)}">
+                View your fee structure and payment history.</p>
+            <a class="card-link" href="/student/fees">View Fees</a>
+        </div>
+
+        <div class="card">
+            <div class="card-icon schedule-icon">📅</div>
+            <h3>Class Schedule</h3>
+            <p>Check your daily class schedule, upcoming exams, and important academic dates.</p>
+            <a class="card-link" href="/student/schedule">View Schedule</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
